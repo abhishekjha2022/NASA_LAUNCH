@@ -2,6 +2,7 @@ const {
   getAllLaunches,
   postLaunch,
   abortLaunches,
+  hasLaunchId,
 } = require("../models/launches.model");
 
 function httpGetAllLaunches(req, res) {
@@ -33,6 +34,11 @@ function httpPostLaunch(req, res) {
 
 function httpAbortLaunches(req, res) {
   const launchId = Number(req.params.id);
+  if (!hasLaunchId(launchId)) {
+    return res.status(400).json({
+      error: "Flight number doesnot match",
+    });
+  }
   const abortedLaunch = abortLaunches(launchId);
   return res.status(200).json(abortedLaunch);
 }
