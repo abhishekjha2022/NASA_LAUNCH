@@ -10,7 +10,6 @@ function httpGetAllLaunches(req, res) {
 
 function httpPostLaunch(req, res) {
   const launch = req.body;
-  launch.launchDate = new Date(launch.launchDate);
   if (
     !launch.mission ||
     !launch.launchDate ||
@@ -21,7 +20,7 @@ function httpPostLaunch(req, res) {
       error: "Not sufficient information",
     });
   }
-
+  launch.launchDate = new Date(launch.launchDate);
   if (isNaN(launch.launchDate)) {
     return res.status(400).json({
       error: "Date is incorrect",
