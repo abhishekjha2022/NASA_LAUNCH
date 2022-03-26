@@ -32,15 +32,24 @@ async function httpPostLaunch(req, res) {
   return res.status(201).json(launch);
 }
 
-function httpAbortLaunches(req, res) {
+async function httpAbortLaunches(req, res) {
   const launchId = Number(req.params.id);
-  if (!hasLaunchId(launchId)) {
+
+  const existsLaunch = await hasLaunchId(launchId);
+  if (!existsLaunch) {
     return res.status(400).json({
       error: "Flight number doesnot match",
     });
   }
-  const abortedLaunch = abortLaunches(launchId);
-  return res.status(200).json(abortedLaunch);
+  const abortedLaunch = await abortLaunches(launchId);
+  if (!abortLaunches) {
+    return res.status(400).json({
+      error: "Launch not aborted",
+    });
+  }
+  return res.status(200).json({
+    ok: true,
+  });
 }
 
 module.exports = {
